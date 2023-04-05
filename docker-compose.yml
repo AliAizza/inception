@@ -1,9 +1,10 @@
-version: '3.8'
+version: '3'
 services:
 
 #--------- mariaDB container ---------
 
   mariadb:
+    container_name: "mariadb"
     build:
       context: ${PWD}/mariaDB/
       args :

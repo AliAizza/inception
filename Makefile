@@ -9,4 +9,7 @@ up:
 down:
 		docker compose -f ${FILE} down
 
+clean:
+		rm -rf data/db/* data/wp/*
+
 restart: down up
