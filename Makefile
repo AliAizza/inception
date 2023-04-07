@@ -1,15 +1,18 @@
-FILE = docker-compose.yml
+FILE = srcs/docker-compose.yml
 
 build:
-		docker compose -f ${FILE} build
+		sudo docker-compose -f  ${FILE} build
 
 up:
-		docker compose -f ${FILE} up
+		sudo docker-compose -f ${FILE} up
 
 down:
-		docker compose -f ${FILE} down
+		sudo docker-compose -f ${FILE} down
 
 clean:
-		rm -rf data/db/* data/wp/*
+		sudo rm -rf data/wp/*
+		sudo rm -rf data/db/*
+		# docker stop $(docker ps -qa) ; docker rm -f $(docker ps -aq) ; docker rmi -f $(docker images -aq) ; docker volume rm  -f $(docker volume ls -q) ; docker network rm $(docker network ls -q) 2>/dev/null
+		sudo docker system prune -af
 
 restart: down up

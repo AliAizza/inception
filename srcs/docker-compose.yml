@@ -1,0 +1,70 @@
+
+version: '3'
+services:
+
+#--------- mariaDB container ---------
+
+  mariadb:
+    container_name: "mariadb"
+    build:
+      context: /home/aaizza/srcs/requirements/mariaDB/
+      args :
+        - MYSQL_USER
+        - MYSQL_PASSWORD
+        - MYSQL_DATABASE
+        - MYSQL_ROOT_PASSWORD
+    env_file:
+      - .env
+    networks:
+      - mynet
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: unless-stopped
+
+#--------- WordPress container ---------
+
+  wordpress:
+    build: /home/aaizza/srcs/requirements/WordPress/
+    depends_on:
+      - mariadb
+    networks:
+      - mynet
+    volumes:
+      - wpdata:/var/www/html/wordpress
+    restart: unless-stopped
+
+#--------- NGINX container ---------
+
+  nginx:
+    build: /home/aaizza/srcs/requirements/NGINX/
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
+    networks:
+      - mynet
+    volumes:
+      - wpdata:/var/www/html/wordpress
+    restart: unless-stopped
+
+#--------- NETWORK ---------
+
+networks:
+  mynet:
+    driver: bridge
+
+#--------- VOLUMES ---------
+
+volumes:
+  wpdata:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/aaizza/data/wp
+  dbdata:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/aaizza/data/db
