@@ -11,7 +11,7 @@ COPY 50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
 COPY script.sh .
 
-COPY db.sql .
+COPY data.sql .
 
 RUN chmod 777 script.sh
 
